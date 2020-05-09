@@ -213,6 +213,9 @@ class NestAPI():
                 # Thermostats (thermostat and sensors system)
                 if bucket["object_key"].startswith(
                         f"shared.{sn}"):
+                    if 'name' in sensor_data:
+                        self.device_data[sn]['name'] = \
+                            sensor_data['name']
                     self.device_data[sn]['current_temperature'] = \
                         sensor_data["current_temperature"]
                     self.device_data[sn]['target_temperature'] = \
@@ -240,9 +243,10 @@ class NestAPI():
                 # Thermostats, pt 2
                 elif bucket["object_key"].startswith(
                         f"device.{sn}"):
-                    self.device_data[sn]['name'] = self._wheres[
-                        sensor_data['where_id']
-                    ]
+                    if 'where_id' in sensor_data:
+                        self.device_data[sn]['name'] = self._wheres[
+                            sensor_data['where_id']
+                        ]
                     # When acts as a sensor
                     if 'backplate_temperature' in sensor_data:
                         self.device_data[sn]['temperature'] = \
